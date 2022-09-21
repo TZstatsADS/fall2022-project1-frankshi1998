@@ -9,7 +9,7 @@ This is the first and only *individual* (as opposed to *team*) project this seme
 
 Term: Fall 2022
 
-+ Projec title: The Breif Introduction on Capitalism and Communism.
++ Projec title: The Breif Introduction to Capitalism and Communism.
 + This project is conducted by [Zhejing Shi]
 
 + Project summary: As we mentioned earlier, most of the nations in the world are capilist. However, it is worthy to get to known a different system too. In order to better understand communism, what aspect should we pay attention to? We will start with some of the most frequent termnologies appears in communist studies.
