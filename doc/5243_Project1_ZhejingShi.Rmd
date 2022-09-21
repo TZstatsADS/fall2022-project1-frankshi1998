@@ -55,6 +55,7 @@ Capital  =
 
 > ### 1. Scratch the Surface of Capitalism
 
+
 ```{r, results='hide', message=FALSE, warning=FALSE, comment=NA}
 ################################################ Capitalism ############################################################
 
@@ -89,7 +90,7 @@ wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
 ### Second Word Cloud based on [TF-IDF] which measures the relative importance of a word.
 freq.capitalism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
-wordcloud(rownames(freq.capitalism), freq.capitalism[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+wordcloud(rownames(freq.capitalism), freq.capitalism[,1], max.words=50, colors=brewer.pal(1, "Dark2"), scale=c(3,0.25))
 
 
 
@@ -145,7 +146,7 @@ wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
 ### Second Word Cloud, based on [TF-IDF] which measures the relative importance of a word.
 freq.communism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
-wordcloud(rownames(freq.communism), freq.communism[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+wordcloud(rownames(freq.communism), freq.communism[,1], max.words=100, colors=brewer.pal(1, "Dark2"), scale=c(3,0.25))
 
 
 
@@ -225,7 +226,7 @@ wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
 ### Second Word Cloud based on [TF-IDF] which measures the relative importance of a word.
 freq.Manifesto = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
-wordcloud(rownames(freq.Manifesto), freq.Manifesto[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+wordcloud(rownames(freq.Manifesto), freq.Manifesto[,1], max.words=100, colors=brewer.pal(1, "Dark2"), scale=c(3,0.25))
 
 ```
 
@@ -335,7 +336,7 @@ wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
 ### Second Word Cloud
 freq.Capital = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
-wordcloud(rownames(freq.Capital), freq.Capital[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+wordcloud(rownames(freq.Capital), freq.Capital[,1], max.words=100, colors=brewer.pal(1, "Dark2"), scale=c(3,0.25))
 
 ```
 
@@ -457,7 +458,7 @@ lenin[lenin.sent$anger >8,]$sentence_spacy[1]
 lenin[lenin.sent$joy >5,]$sentence_spacy[2]
 
 ### Take a brief look on which sentences in the book Capital express anger and joy
-Capital[Capital.sent$anger >9,]$sentence_spacy[2]
+Capital[Capital.sent$anger >9,]$sentence_spacy[1]
 Capital[Capital.sent$joy >4,]$sentence_spacy[1]
 ```
 <br>
