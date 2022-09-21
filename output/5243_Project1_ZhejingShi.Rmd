@@ -1,5 +1,5 @@
 ---
-title: "5243 Project 1"
+title: "5243 Project 1 - Zhejing Shi"
 output: html_notebook
 ---
 
@@ -9,7 +9,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = TRUE)
 ```
 
 *** 
-> ## **The Breif Introduction on Capitalism and Communism.**
+> ## **The Brief Introduction to Capitalism and Communism.**
 
 ![](/Users/Frank Shi/Desktop/Applied Data Science/image1.png)
 
@@ -69,7 +69,7 @@ words = words %>%
 
 ### Document matrix 1
 words_dtm <- DocumentTermMatrix(words)
-### Document matrix 2
+### Document matrix 2 based on [TF-IDF] which measures the relative importance of a word.
 words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
 words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
 
@@ -87,7 +87,7 @@ capitalism_chart
 ## First word cloud
 wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
-### Second Word Cloud
+### Second Word Cloud based on [TF-IDF] which measures the relative importance of a word.
 freq.capitalism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
 wordcloud(rownames(freq.capitalism), freq.capitalism[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
@@ -99,13 +99,14 @@ wordcloud(rownames(freq.capitalism), freq.capitalism[,1], max.words=50, colors=b
 #### The first frequency graph shows the words appears more than 1000 times. The second graph is a overall wordcloud, while the last graph is a wordcloud based on [TF-IDF] which measures the relative importance of a word.
 <br>
 
-#### Words such as capital, employment, commodity, profit, money, and etc. are heavily mentionly in the School of Capitalism. Most of those words also happen to appearin the School of Communism, and we will introduce what do communists think of these terms later in this report.
+#### Words such as capital, employment, commodity, labour, profit, money, and etc. are heavily mentionly in the School of Capitalism. Most of those words also happen to appearin the School of Communism, and we will introduce what do communists think of these terms later in this report.
 
 <br><br>
 
 
-#### As we mentioned earlier, most of the nations in the world are capilist. However, it is worthy to get to known a different system too. In order to better understand communism, what aspect should we pay attention to? We will start with some of the most frequent termnologies appears in communist studies.
+#### As we mentioned earlier, most of the nations in the world are capilist. However, it is worthy to get to known other systems too. In order to better understand communism, which aspect should we pay attention to? We will start with some of the most frequent termnologies appears in communist studies.
 
+***
 
 > ###  2. Take a Overview of School of  Communism
 
@@ -122,8 +123,9 @@ words =  tm_map(words, stripWhitespace)
 
 ### Document matrix1
 words_dtm <- DocumentTermMatrix(words)
+
+### Document matrix 2 based on [TF-IDF] which measures the relative importance of a word.
 words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
-### Document matrix 2
 words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
 
 
@@ -141,7 +143,7 @@ communism_chart
 ## First word cloud
 wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
-### Second Word Cloud
+### Second Word Cloud, based on [TF-IDF] which measures the relative importance of a word.
 freq.communism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
 wordcloud(rownames(freq.communism), freq.communism[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
 
@@ -167,12 +169,10 @@ wordcloud(rownames(freq.communism), freq.communism[,1], max.words=100, colors=br
 #### **Frequency Table of Book Titles**
 
 ```{r}
-
 communism %>%
 	group_by(title)%>%
 	summarise(count = n())%>%
 	arrange(desc(count))
-
 ```
 <br>
 
@@ -181,6 +181,8 @@ communism %>%
 
 
 <br><br><br>
+
+***
 
 > ### 2.1  Check the First Communism Related Book:  Communist_Manifesto (共产党宣言)
 
@@ -200,8 +202,9 @@ words = words %>%
 
 ### Document matirx
 words_dtm <- DocumentTermMatrix(words)
+
+### Document matrix 2 based on [TF-IDF] which measures the relative importance of a word.
 words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
-### Document matrix 2
 words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
 words_dtm_tfidf
 
@@ -213,15 +216,14 @@ colnames(table) = c('term', 'frequency')
 
 
 # Bar chart
-communism_chart<-ggplot(data= subset(table, frequency >1000), aes(x=reorder(term, -frequency), y=frequency)) +
+communism_chart<-ggplot(data= subset(table, frequency >20), aes(x=reorder(term, -frequency), y=frequency)) +
   geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) + labs(x ="term")
 communism_chart
-
 
 ## First word cloud
 wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
-### Second Word Cloud
+### Second Word Cloud based on [TF-IDF] which measures the relative importance of a word.
 freq.Manifesto = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
 wordcloud(rownames(freq.Manifesto), freq.Manifesto[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
 
@@ -235,8 +237,9 @@ wordcloud(rownames(freq.Manifesto), freq.Manifesto[,1], max.words=100, colors=br
 
 * #### class: The two classes are the proletariat (the working class), who make up the majority of the population within society and must work to survive, and the bourgeoisie (the capitalist class), a small minority who derives profit from employing the working class--(Wikipedia)
 
+<br>
 
-
+***
 
 > ### 2.2  Check the Second Communism Related Book:Essential Works of Lenin
 
@@ -255,8 +258,9 @@ words = words %>%
 
 ### Document matrix
 words_dtm <- DocumentTermMatrix(words)
+
+### Document matrix 2 based on [TF-IDF] which measures the relative importance of a word.
 words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
-### Document matrix 2
 words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
 
 ## creating freq data frame
@@ -271,7 +275,7 @@ lenin_chart
 ## First word cloud
 wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
 
-### Second Word Cloud
+### Second Word Cloud based on [TF-IDF] which measures the relative importance of a word.
 freq.lenin = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
 wordcloud(rownames(freq.lenin), freq.lenin[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
 
@@ -289,9 +293,9 @@ wordcloud(rownames(freq.lenin), freq.lenin[,1], max.words=100, colors=brewer.pal
 * #### revolution: Lenin exhorted all oppressed nations of the world to unite against their oppressors and play the role of the revolutionary proletariat against oppressive, capitalist nations. Lenin wanted Communist political parties in every country to lead the revolution. The Russian Revolution (1917) established the modern world’s first socialist state – the Union of Socialist Soviet Republics.
 
 
+***
 
-
-> ###  Check the Third Communism Related Book: Capital: (资本论)
+> ### 2.3 Check the Third Communism Related Book: Capital: (资本论)
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 ################################################   Capital  ############################################################
@@ -310,10 +314,11 @@ words = words %>%
 
   
 
-### Document matirx
+### Document matrix 1
 words_dtm <- DocumentTermMatrix(words)
+
+### Document matrix 2 based on [TF-IDF] which measures the relative importance of a word.
 words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
-### Document matrix 2
 words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
 
 ## creating freq data frame
@@ -338,9 +343,13 @@ wordcloud(rownames(freq.Capital), freq.Capital[,1], max.words=100, colors=brewer
 
 * #### Labourer: Marx held that, in capitalism, labour was merely a commodity: in exchange for work, a labourer would receive a subsistence wage.
 
-> ### Sentiment analysis
+<br>
 
-**Sentiment comparison between capitalism and Communism**
+***
+> ### 3. Sentiment analysis
+
+#### **Sentiment comparison between capitalism and Communism**
+
 ```{r, results='hide', message=FALSE, warning=FALSE}
 #########################################   Communism:  ######################################
 ## sentiments score for capitalism
@@ -379,11 +388,11 @@ communism_rate  ## counts of negative / counts of positive
 #### After comparing the propotions of counts of negative words. We see that, overall, books from school of communism has higher negative rate
 
 
+***
+<br>
 
-**Sentiment Comparison Among Communism Books*
+#### **Sentiment Comparison Among Communism Books**
 ```{r}
-
-
 ###########################################  Communist_Manifesto  #####################
 freq.Manifesto_score <- iconv(Communist_Manifesto$lemmatized_str)
 Manifesto.sent<- get_nrc_sentiment(freq.Manifesto_score)
@@ -393,11 +402,8 @@ lenin.score <- iconv(lenin$lemmatized_str)
 lenin.sent<- get_nrc_sentiment(lenin.score)
 ################################################   Capital  ###########################
 #### sentiment score
-Capital.score <- iconv(lenin$lemmatized_str)
+Capital.score <- iconv(Capital$lemmatized_str)
 Capital.sent<- get_nrc_sentiment(Capital.score)
-
-
-
 
 ###########################################  Communist_Manifesto  #####################
 barplot(colSums(Manifesto.sent),
@@ -405,7 +411,6 @@ barplot(colSums(Manifesto.sent),
         col = rainbow(10),
         ylab = 'Count',
         main = 'Communisum: Communist_Manifesto')
-
 
 ################################################   lenin  #############################
 barplot(colSums(lenin.sent),
@@ -422,12 +427,26 @@ barplot(colSums(Capital.sent),
         main = 'Communisum: Capital')
 
 ```
-#### It seems like sentiments are distributed similarly among three different books.
+```{r}
+Manifesto_rate = as.numeric(colSums(Manifesto.sent)[9]/colSums(Manifesto.sent)[10])
+Manifesto_rate ## counts of negative / counts of positive
+
+lenin_rate = as.numeric(colSums(lenin.sent)[9]/colSums(lenin.sent)[10])
+lenin_rate  ## counts of negative / counts of positive
+
+Capital_rate = as.numeric(colSums(Capital.sent)[9]/colSums(Capital.sent)[10])
+Capital_rate  ## counts of negative / counts of positive
+
+data.frame( title = c("Communism Manifesto", "Essential Work of Lenin", "Capital"), negative_rate= c(Manifesto_rate, lenin_rate, Capital_rate))
+```
+
+
+#### It seems like sentiments are distributed similarly among three different books. However, Communism Manifesto has the highest negative rate. (counts of negative/counts of positive)
 <br>
 
 ***
 
-**Take a brief look on which sentences in Communist Manifesto express anger and joy**
+#### **Take a brief look on which sentences in Communist Manifesto express anger and joy**
 ```{r}
 ### Take a brief look on which sentences in Communist Manifesto express anger and joy
 Communist_Manifesto[Manifesto.sent$anger >5,]$sentence_spacy[1]
@@ -442,6 +461,8 @@ Capital[Capital.sent$anger >9,]$sentence_spacy[2]
 Capital[Capital.sent$joy >4,]$sentence_spacy[1]
 ```
 <br>
+
+***
 
 <style>
 div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
