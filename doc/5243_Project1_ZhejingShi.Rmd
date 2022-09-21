@@ -447,7 +447,7 @@ data.frame( title = c("Communism Manifesto", "Essential Work of Lenin", "Capital
 
 ***
 
-#### **Take a brief look on which sentences in Communist Manifesto express anger and joy**
+#### **Take a brief look on which sentences in 3 Communist books express anger and joy**
 ```{r}
 ### Take a brief look on which sentences in Communist Manifesto express anger and joy
 Communist_Manifesto[Manifesto.sent$anger >5,]$sentence_spacy[1]
