@@ -12,7 +12,7 @@ Term: Fall 2022
 + Projec title: The Breif Introduction on Capitalism and Communism.
 + This project is conducted by [Zhejing Shi]
 
-+ Project summary: [a short summary] Capitalism is defined as an economic system in which a country’s trade, industry, and profits are controlled only by private companies. The United States and most of the nations around the world are capitalist countries, but capitalism is not the only economic system available. Communism, on the other hand, advocating that goods are owned in common and are available to all as needed, means of production are owned communally.
++ Project summary: As we mentioned earlier, most of the nations in the world are capilist. However, it is worthy to get to known a different system too. In order to better understand communism, what aspect should we pay attention to? We will start with some of the most frequent termnologies appears in communist studies.
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
