@@ -4,15 +4,15 @@
 
 <img src="figs/100126-the-glass.jpeg" width="500">
 
-### [Project Description](doc/)
+### [This report aims to 1.)help people understand the basic concepts of communism. 2.)explore insights between capitalism and communism.](doc/)
 This is the first and only *individual* (as opposed to *team*) project this semester. 
 
 Term: Fall 2022
 
-+ Projec title: Lorem ipsum dolor sit amet
++ Projec title: The Breif Introduction on Capitalism and Communism.
 + This project is conducted by [Zhejing Shi]
 
-+ Project summary: [a short summary] Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
++ Project summary: [a short summary] Capitalism is defined as an economic system in which a country’s trade, industry, and profits are controlled only by private companies. The United States and most of the nations around the world are capitalist countries, but capitalism is not the only economic system available. Communism, on the other hand, advocating that goods are owned in common and are available to all as needed, means of production are owned communally.
 
 Following [suggestions](http://nicercode.github.io/blog/2013-04-05-projects/) by [RICH FITZJOHN](http://nicercode.github.io/about/#Team) (@richfitz). This folder is orgarnized as follows.
 
