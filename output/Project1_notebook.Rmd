@@ -1,0 +1,461 @@
+---
+title: "5243 Project 1"
+output: html_notebook
+---
+
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = TRUE) 
+```
+
+*** 
+> ## **The Breif Introduction on Capitalism and Communism.**
+
+![](/Users/Frank Shi/Desktop/Applied Data Science/image1.png)
+
+<br><br>
+
+#### Capitalism is defined as an economic system in which a country’s trade, industry, and profits are controlled only by private companies. The United States and most of the nations around the world are capitalist countries, but capitalism is not the only economic system available. Communism, on the other hand, advocating that goods are owned in common and are available to all as needed, means of production are owned communally.
+#### **This report aims to 1.)help people understand the basic concepts of communism. 2.)explore insights between capitalism and communism.**
+
+
+
+
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+library(RColorBrewer)
+library(tm)
+library(wordcloud)
+library(NLP)
+library(tidyverse)
+library(syuzhet)
+
+```
+
+
+
+
+```{r}
+##### Separate data sets into: capitalism, communism, Communist_Manifesto, lenin, Capital
+docs =  read.csv("philosophy_data.csv",stringsAsFactors =  F)
+capitalism  =
+  docs %>% filter(school  == "capitalism")
+communism  =
+  docs %>% filter(school  == "communism")
+Communist_Manifesto  =
+  docs %>% filter(title  == "The Communist Manifesto")
+lenin  =
+  docs %>% filter(title  == "Essential Works Of Lenin")
+Capital  =
+  docs %>% filter(title  == "Capital")
+
+```
+
+
+
+> ### 1. Scratch the Surface of Capitalism
+
+```{r, results='hide', message=FALSE, warning=FALSE, comment=NA}
+################################################ Capitalism ############################################################
+
+## data processing
+words = Corpus(VectorSource(capitalism$lemmatized_str))
+words = words %>%
+  tm_map( removeNumbers)%>%
+  tm_map( removePunctuation)%>%
+  tm_map( removeWords, c("the", "and", "PRON", stopwords("english"))) %>% # Remove PRON 
+  tm_map( removeWords, c("must", "however", "two", "one", "upon", "much", "every", "either", "must", "can","may","therefore","will", "good","great", stopwords("english")))%>%
+  tm_map( stripWhitespace)
+
+### Document matrix 1
+words_dtm <- DocumentTermMatrix(words)
+### Document matrix 2
+words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
+words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
+
+
+## creating freq data frame
+freq = data.frame(sort(colSums(as.matrix(words_dtm)), decreasing=TRUE))
+table = data.frame(term = row.names(freq), frequency= freq)
+colnames(table) = c('term', 'frequency')
+
+# Bar chart
+capitalism_chart<-ggplot(data= subset(table, frequency >1000), aes(x=reorder(term, -frequency), y=frequency)) +
+  geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) +labs(x ="term")
+capitalism_chart
+
+## First word cloud
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+### Second Word Cloud
+freq.capitalism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
+wordcloud(rownames(freq.capitalism), freq.capitalism[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+
+
+
+```
+
+#### The first frequency graph shows the words appears more than 1000 times. The second graph is a overall wordcloud, while the last graph is a wordcloud based on [TF-IDF] which measures the relative importance of a word.
+<br>
+
+#### Words such as capital, employment, commodity, profit, money, and etc. are heavily mentionly in the School of Capitalism. Most of those words also happen to appearin the School of Communism, and we will introduce what do communists think of these terms later in this report.
+
+<br><br>
+
+
+#### As we mentioned earlier, most of the nations in the world are capilist. However, it is worthy to get to known a different system too. In order to better understand communism, what aspect should we pay attention to? We will start with some of the most frequent termnologies appears in communist studies.
+
+
+> ###  2. Take a Overview of School of  Communism
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+################################################   Communism:  ############################################################
+## data processing
+words = Corpus(VectorSource(capitalism$lemmatized_str))
+words = tm_map(words, removeNumbers)
+words = tm_map(words, removePunctuation)
+words = tm_map(words, removeWords, c("the", "and", "PRON", stopwords("english"))) # Remove PRON 
+words = tm_map(words, removeWords, c("must", "however", "two", "one", "upon", "much", "every", "either", "must", "can","may","therefore","will", "good","great", stopwords("english")))
+words = tm_map(words, removeWords, c("even", "always", "whole", stopwords("english"))) 
+words =  tm_map(words, stripWhitespace)
+
+### Document matrix1
+words_dtm <- DocumentTermMatrix(words)
+words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
+### Document matrix 2
+words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
+
+
+
+## creating freq data frame
+freq = data.frame(sort(colSums(as.matrix(words_dtm)), decreasing=TRUE))
+table = data.frame(term = row.names(freq), frequency= freq)
+colnames(table) = c('term', 'frequency')
+
+
+# Bar chart
+communism_chart<-ggplot(data= subset(table, frequency >1000), aes(x=reorder(term, -frequency), y=frequency)) +
+  geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) + labs(x ="term")
+communism_chart
+## First word cloud
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+### Second Word Cloud
+freq.communism = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
+wordcloud(rownames(freq.communism), freq.communism[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+
+
+
+
+```
+
+<br>
+
+##### Both frequency bar chat and  wordcloud graphs reveal us some frequent terms such as Land, Capital, Money, commodity. In order to undertand Communism, it is important to ask the following question.
+#### **Question: what does communism think of these terms?**
+
+* #### Money: There is no government or private property or currency, and the wealth is divided among citizens equally or according to individual need
+* #### Capital: Marxists define capital as “a social, economic relation” between people (rather than between people and things). In this sense they seek to abolish capital.
+* #### Land: Under communism, land is seen as property. All property is communally owned, and each person receives a portion based on what they need.
+* #### Commodity: In Marx's theory, a commodity is something that is bought and sold, or exchanged in a relationship of trade. It has value, which represents a  quantity of human labor.
+* #### Capitalism: Karl Marx saw capitalism as a progressive historical stage that would eventually be followed by socialism. Class conflict derives in capitalism because the proletariat are exploited in the system.
+
+
+<br>
+
+#### **Frequency Table of Book Titles**
+
+```{r}
+
+communism %>%
+	group_by(title)%>%
+	summarise(count = n())%>%
+	arrange(desc(count))
+
+```
+<br>
+
+#### Above table shows number of sentences in 3 books introducing communism. Since all 3 books have different length, one overall wordcloud graph may not be representive. Thus, we need to explore more!!!
+
+
+
+<br><br><br>
+
+> ### 2.1  Check the First Communism Related Book:  Communist_Manifesto (共产党宣言)
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+################################################   Communist_Manifesto  ############################################################
+## data preprocessing
+words = Corpus(VectorSource(Communist_Manifesto$lemmatized_str))
+words = words %>%
+  tm_map( removeNumbers)%>%
+  tm_map( removePunctuation)%>%
+  tm_map( removeWords, c("the", "and", "PRON", stopwords("english"))) %>% # Remove PRON 
+  tm_map( removeWords, c("must", "however", "two", "one", "upon", "much", "every", "either", "must", "can","may","therefore","will", "good","great", stopwords("english")))%>%
+  tm_map(removeWords, c("even", "always", "whole", stopwords("english")))%>%
+  tm_map(stripWhitespace)
+
+
+
+### Document matirx
+words_dtm <- DocumentTermMatrix(words)
+words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
+### Document matrix 2
+words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
+words_dtm_tfidf
+
+
+## creating freq data frame
+freq = data.frame(sort(colSums(as.matrix(words_dtm)), decreasing=TRUE))
+table = data.frame(term = row.names(freq), frequency= freq)
+colnames(table) = c('term', 'frequency')
+
+
+# Bar chart
+communism_chart<-ggplot(data= subset(table, frequency >1000), aes(x=reorder(term, -frequency), y=frequency)) +
+  geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) + labs(x ="term")
+communism_chart
+
+
+## First word cloud
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+### Second Word Cloud
+freq.Manifesto = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
+wordcloud(rownames(freq.Manifesto), freq.Manifesto[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+
+```
+
+#### Besides what we disscussed previously, Communist Manifesto revealed us some other frequent words such as [bourgeois, proletariat, class]. In order to make everyone better prepared to read this book. The following terminologies are worth knowing.
+
+* #### bourgeois: bourgeoisie, the social order that is dominated by the so-called middle class. In Marxist theory, the bourgeoisie plays a heroic role by revolutionizing industry and modernizing society. However, it also seeks to monopolize the benefits of this modernization by exploiting the propertyless proletariat
+
+* #### proletariat: the lowest or one of the lowest economic and social classes in a society.The proletariat is that class in society which lives entirely from the sale of its labor and does not draw profit from any kind of capital
+
+* #### class: The two classes are the proletariat (the working class), who make up the majority of the population within society and must work to survive, and the bourgeoisie (the capitalist class), a small minority who derives profit from employing the working class--(Wikipedia)
+
+
+
+
+> ### 2.2  Check the Second Communism Related Book:Essential Works of Lenin
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+################################################   Lenin  ############################################################
+## data processing
+words = Corpus(VectorSource(lenin$lemmatized_str))
+words = words %>%
+  tm_map( removeNumbers)%>%
+  tm_map( removePunctuation)%>%
+  tm_map( removeWords, c("the", "and", "PRON", stopwords("english"))) %>% # Remove PRON 
+  tm_map( removeWords, c("must", "however", "two", "one", "upon", "much", "every", "either", "must", "can","may","therefore","will", "good","great", stopwords("english")))%>%
+  tm_map(removeWords, c("even", "always", "whole", stopwords("english")))%>%
+  tm_map(stripWhitespace)
+
+
+### Document matrix
+words_dtm <- DocumentTermMatrix(words)
+words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
+### Document matrix 2
+words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
+
+## creating freq data frame
+freq = data.frame(sort(colSums(as.matrix(words_dtm)), decreasing=TRUE))
+table = data.frame(term = row.names(freq), frequency= freq)
+colnames(table) = c('term', 'frequency')
+
+# Bar chart
+lenin_chart<-ggplot(data= subset(table, frequency >270), aes(x=reorder(term, -frequency), y=frequency)) +
+  geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) + labs(x ="term")
+lenin_chart
+## First word cloud
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+### Second Word Cloud
+freq.lenin = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
+wordcloud(rownames(freq.lenin), freq.lenin[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+
+```
+
+#### Essential Works Of Lenin revealed us some other frequent words such as [imperialism, monapoly, revolutionary]. In order to make everyone better prepared to read this book. The following terminologies are worth knowing.
+
+* #### Imperialism: Lenin thought that imperialism was the "highest stage" of capitalism. He says that modern imperialism is different from ancient and medieval imperialism. Modern imperialism is mainly subject to economic considerations which is a method of exploitation.
+
+* #### Monopoly: A monopoly is defined as a single seller or producer that excludes competition from providing the same product. A monopoly can dictate price changes and creates barriers for competitors to enter the marketplace. Communists oppose monopoly.
+
+
+* #### Work class: There are two classes, proletariat (the working class) and capital class. Communists concern the struggle of the working class 
+
+* #### revolution: Lenin exhorted all oppressed nations of the world to unite against their oppressors and play the role of the revolutionary proletariat against oppressive, capitalist nations. Lenin wanted Communist political parties in every country to lead the revolution. The Russian Revolution (1917) established the modern world’s first socialist state – the Union of Socialist Soviet Republics.
+
+
+
+
+> ###  Check the Third Communism Related Book: Capital: (资本论)
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+################################################   Capital  ############################################################
+## data reprocessing
+
+
+words = Corpus(VectorSource(Capital$lemmatized_str))
+words = words %>%
+  tm_map( removeNumbers)%>%
+  tm_map( removePunctuation)%>%
+  tm_map( removeWords, c("the", "and", "PRON", stopwords("english"))) %>% # Remove PRON 
+  tm_map( removeWords, c("must", "however", "two", "one", "upon", "much", "every", "either", "must", "can","may","therefore","will", "good","great", stopwords("english")))%>%
+  tm_map(removeWords, c("even", "always", "whole", stopwords("english")))%>%
+  tm_map(stripWhitespace)
+
+
+  
+
+### Document matirx
+words_dtm <- DocumentTermMatrix(words)
+words_dtm_tfidf <- DocumentTermMatrix(words, control = list(weighting = weightTfIdf))
+### Document matrix 2
+words_dtm_tfidf = removeSparseTerms(words_dtm_tfidf, 0.95)
+
+## creating freq data frame
+freq = data.frame(sort(colSums(as.matrix(words_dtm)), decreasing=TRUE))
+table = data.frame(term = row.names(freq), frequency= freq)
+colnames(table) = c('term', 'frequency')
+
+# Bar chart
+Capital_chart<-ggplot(data= subset(table, frequency >1000), aes(x=reorder(term, -frequency), y=frequency)) +
+  geom_bar(stat="identity", fill="orange")+ theme(axis.text.x = element_text(angle = 45,hjust=1) ) + labs(x ="term")
+Capital_chart
+## First word cloud
+wordcloud(rownames(freq), freq[,1], max.words=50, colors=brewer.pal(1, "Dark2"))
+
+### Second Word Cloud
+freq.Capital = data.frame(sort(colSums(as.matrix(words_dtm_tfidf)), decreasing=TRUE))
+wordcloud(rownames(freq.Capital), freq.Capital[,1], max.words=100, colors=brewer.pal(1, "Dark2"))
+
+```
+
+#### Based on the word cloud graph generated from book Capital, the book Capital shares similar terms with previous books. However, Capital has a lot of sentences related to the word **Labour/Labourer**
+
+* #### Labourer: Marx held that, in capitalism, labour was merely a commodity: in exchange for work, a labourer would receive a subsistence wage.
+
+> ### Sentiment analysis
+
+**Sentiment comparison between capitalism and Communism**
+```{r, results='hide', message=FALSE, warning=FALSE}
+#########################################   Communism:  ######################################
+## sentiments score for capitalism
+capitalism.score <- iconv(capitalism$lemmatized_str)
+capitalism.sent <- get_nrc_sentiment(capitalism.score)
+
+barplot(colSums(capitalism.sent),
+        las = 2,
+        col = rainbow(10),
+        ylab = 'Count',
+        main = 'Sentiment Scores Capitalism Overall')
+
+##########################################   Communism:  ######################################
+#### sentiment score
+communism_score <- iconv(communism$lemmatized_str)
+communism_sent<- get_nrc_sentiment(communism_score)
+
+
+barplot(colSums(communism_sent),
+        las = 2,
+        col = rainbow(10),
+        ylab = 'Count',
+        main = 'Sentiment Scores Communisum Overall') 
+
+
+
+```
+```{r}
+capitalism_rate = as.numeric(colSums(capitalism.sent)[9]/colSums(capitalism.sent)[10])
+capitalism_rate ## counts of negative / counts of positive
+
+communism_rate = as.numeric(colSums(communism_sent)[9]/colSums(communism_sent)[10])
+communism_rate  ## counts of negative / counts of positive
+```
+
+#### After comparing the propotions of counts of negative words. We see that, overall, books from school of communism has higher negative rate
+
+
+
+**Sentiment Comparison Among Communism Books*
+```{r}
+
+
+###########################################  Communist_Manifesto  #####################
+freq.Manifesto_score <- iconv(Communist_Manifesto$lemmatized_str)
+Manifesto.sent<- get_nrc_sentiment(freq.Manifesto_score)
+
+################################################   lenin  #############################
+lenin.score <- iconv(lenin$lemmatized_str)
+lenin.sent<- get_nrc_sentiment(lenin.score)
+################################################   Capital  ###########################
+#### sentiment score
+Capital.score <- iconv(lenin$lemmatized_str)
+Capital.sent<- get_nrc_sentiment(Capital.score)
+
+
+
+
+###########################################  Communist_Manifesto  #####################
+barplot(colSums(Manifesto.sent),
+        las = 2,
+        col = rainbow(10),
+        ylab = 'Count',
+        main = 'Communisum: Communist_Manifesto')
+
+
+################################################   lenin  #############################
+barplot(colSums(lenin.sent),
+        las = 2,
+        col = rainbow(10),
+        ylab = 'Count',
+        main = 'SCommunisum: Essential Work of Lene')
+
+################################################   Capital  ###########################
+barplot(colSums(Capital.sent),
+        las = 2,
+        col = rainbow(10),
+        ylab = 'Count',
+        main = 'Communisum: Capital')
+
+```
+#### It seems like sentiments are distributed similarly among three different books.
+<br>
+
+***
+
+**Take a brief look on which sentences in Communist Manifesto express anger and joy**
+```{r}
+### Take a brief look on which sentences in Communist Manifesto express anger and joy
+Communist_Manifesto[Manifesto.sent$anger >5,]$sentence_spacy[1]
+Communist_Manifesto[Manifesto.sent$joy >3,]$sentence_spacy[1]
+
+### Take a brief look on which sentences in Essential Works of Lenin express anger and joy
+lenin[lenin.sent$anger >8,]$sentence_spacy[1]
+lenin[lenin.sent$joy >5,]$sentence_spacy[2]
+
+### Take a brief look on which sentences in the book Capital express anger and joy
+Capital[Capital.sent$anger >9,]$sentence_spacy[2]
+Capital[Capital.sent$joy >4,]$sentence_spacy[1]
+```
+<br>
+
+<style>
+div.blue { background-color:#e6f0ff; border-radius: 5px; padding: 20px;}
+</style>
+<div class = "blue">
+
+- Wrote at the end, it is hard to believe that there is a perfect social system works perfectly for all. However, it's worth time to learn from different social system and maintain the good communication. We are living in world with a diversity of species,  people, cultures, and social systems.
+Wish us a harmonies, peaceful, and non-violent world
+
+
+</div>
+
+
+![](/Users/Frank Shi/Desktop/Applied Data Science/image4.png)
+
+
+
